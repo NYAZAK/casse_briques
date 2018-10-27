@@ -71,7 +71,7 @@ function collisionDetection() {
           if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
             dy = -dy;
             b.status = 0;
-            score++;
+            score = score + (score += 2);
             if(b.status == 0){
                 ctx.beginPath();
                 ctx.arc(x, y, ballRadius, 0, Math.PI*2);
