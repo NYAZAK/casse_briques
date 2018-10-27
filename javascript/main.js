@@ -2,7 +2,7 @@
 // crée le canvas et lui donne les dimensions
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-
+var score = 0;
 // nos variables 
 var x = canvas.width/5;
 var y = canvas.height-40;
@@ -49,16 +49,15 @@ function drawBricks() {
     for(var c = 0; c < brickColumnCount; c++){
         for(var r=0; r <brickRowCount; r++){
             if(bricks[c][r].status == 1) {
-
-                var brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-                var brickY = (r*(brickHeight + brickPadding)) + brickOffsetTop;
-                bricks[c][r].x = brickX;
-                bricks[c][r].y = brickY;
-                ctx.beginPath();
-                ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = '#0095DD';
-                ctx.fill();
-                ctx.closePath();
+        var brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        var brickY = (r*(brickHeight + brickPadding)) + brickOffsetTop;
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+        ctx.beginPath();
+        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        ctx.fillStyle = '#0095DD';
+        ctx.fill();
+        ctx.closePath();
             }
         }
     }
@@ -72,6 +71,18 @@ function collisionDetection() {
           if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
             dy = -dy;
             b.status = 0;
+            score++;
+            if(b.status == 0){
+                ctx.beginPath();
+                ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+                ctx.fillStyle = "yellow";
+                ctx.fill();
+                ctx.closePath();
+            }
+            if(score == brickColumnCount * brickRowCount) {
+                alert("Vous avez gagnée, Bravo !");
+                document.location.reload();
+            }
           }
         }
       }
@@ -124,8 +135,16 @@ function drawBall(){
     ctx.fill();
     ctx.closePath();
 }
+/**
+ * fonction permettant d'afficher le score du joueur
+ * 
+ */
 
-
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = '#0095DD';
+    ctx.fillText('Score: ' + score, 8, 20);
+}
 
 
 // function qui donne le mouvement à une balle 
@@ -135,6 +154,7 @@ function draw() {
     drawPaddle();
     drawBricks();
     collisionDetection();
+    drawScore();
     if(y + dy < ballRadius){
         dy = -dy;  
     }
