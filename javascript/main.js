@@ -2,6 +2,8 @@
 // crée le canvas et lui donne les dimensions
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+
+// variable de score
 var score = 0;
 // nos variables 
 var x = canvas.width/5;
@@ -71,7 +73,6 @@ function collisionDetection() {
           if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
             dy = -dy;
             b.status = 0;
-            score++;
             if(b.status == 0){
                 ctx.beginPath();
                 ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -79,10 +80,12 @@ function collisionDetection() {
                 ctx.fill();
                 ctx.closePath();
             }
-            if(score == brickColumnCount * brickRowCount) {
+            if(score == (brickRowCount * brickColumnCount) ) {
+                console.log((brickRowCount * brickColumnCount), "c'est ici u'il a un score");
                 alert("Vous avez gagnée, Bravo !");
                 document.location.reload();
             }
+            score = score + (score += 2);
           }
         }
       }
@@ -95,6 +98,7 @@ function collisionDetection() {
  */
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener('mousemove', mouseMoveHandler, false);
 
 /**
  * on ajoute deux fonctions pour faire passer les variables
@@ -119,6 +123,17 @@ function keyUpHandler(e){
         leftPressed = false;
     }
 }
+/**
+ * ajoute la fonction de deplacement du paddle avec la sourie
+ */
+
+ function mouseMoveHandler(e) {
+     var relativeX = e.clientX - canvas.offsetLeft;
+     if(relativeX > 0 && relativeX < canvas.width ) {
+         paddleX = relativeX - paddleWidth / 2;
+            }
+    }
+
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
